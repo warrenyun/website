@@ -5,7 +5,7 @@ import "../styles/global.css";
 ---
 
 <!doctype html>
-<html lang="en" class="h-screen" id="html-root">
+<html lang="en" class="h-screen dark" id="html-root">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
@@ -159,114 +159,149 @@ import "../styles/global.css";
 			html.light .gruvbox-yellow {
 				color: #c18401;
 			}
+
+			html.dark .gruvbox-green {
+				color: #8ec07c;
+			}
+			html.light .gruvbox-green {
+				color: #427b58;
+			}
+
+			/*
+			  the page owns its own rhythm/sizing. these rules are unlayered, so
+			  they beat both global.css and tailwind's @layer utilities — keep the
+			  vertical spacing here rather than in space-y-* classes.
+			*/
+			body {
+				padding: 6rem 1.5rem 4rem;
+			}
+			main,
+			p,
+			h1,
+			h2,
+			ul {
+				margin: 0;
+				padding: 0;
+			}
+			h1 {
+				font-size: 1.875rem;
+			}
+			h2 {
+				font-size: 1.125rem;
+			}
+			ul {
+				padding-left: 1.15rem;
+			}
+
+			/* between blocks */
+			main > * + * {
+				margin-top: 2.5rem;
+			}
+			/* inside a block */
+			section > * + * {
+				margin-top: 0.85rem;
+			}
+			h1 + p {
+				margin-top: 1.25rem;
+			}
+			li + li {
+				margin-top: 0.35rem;
+			}
+			code {
+				padding: 0.1rem 0.4rem;
+				/* keep the border/padding intact when it wraps on narrow screens */
+				-webkit-box-decoration-break: clone;
+				box-decoration-break: clone;
+			}
 		</style>
 	</head>
-	<body>
-		<main class="w-full px-32 py-16">
-			<button
-				id="theme-toggle"
-				class="fixed top-4 right-4 p-2 rounded-lg theme-bg transition-colors duration-200"
+	<body class="min-h-screen flex items-start justify-center">
+		<button
+			id="theme-toggle"
+			class="fixed top-4 right-4 p-2 rounded-lg theme-bg transition-colors duration-200"
+		>
+			<svg
+				id="sun-icon"
+				class="w-5 h-5"
+				fill="currentColor"
+				viewBox="0 0 20 20"
 			>
-				<svg
-					id="sun-icon"
-					class="w-6 h-6 hidden"
-					fill="currentColor"
-					viewBox="0 0 20 20"
-				>
-					<path
-						d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-					></path>
-				</svg>
-				<svg
-					id="moon-icon"
-					class="w-6 h-6"
-					fill="currentColor"
-					viewBox="0 0 20 20"
-				>
-					<path
-						d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-					></path>
-				</svg>
-			</button>
-			<div class="flex items-center justify-between">
-				<div class="flex-grow max-w-3xl text-xl">
-					<h1 class="md:text-7xl text-4xl theme-text-primary">
-						hi, i'm warren!
-					</h1>
-					<p>
-						i'm a <span id="typing-text"></span> from nyc. i'm 20 and
-						i currently study computer science at <span
-							class="gruvbox-yellow">georgia tech</span
-						>.
-					</p>
+				<path
+					d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+				></path>
+			</svg>
+			<svg
+				id="moon-icon"
+				class="w-5 h-5 hidden"
+				fill="currentColor"
+				viewBox="0 0 20 20"
+			>
+				<path
+					d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+				></path>
+			</svg>
+		</button>
+		<main class="w-full max-w-2xl text-lg leading-relaxed">
+			<section>
+				<h1 class="theme-text-primary">warren yun</h1>
+				<p>
+					Hi. I like to make cool things with software!
+				</p>
+				<p>
+					Right now, I am working on self-driving cars at <a
+							href="https://comma.ai/"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="underline gruvbox-green">comma.ai</a>. I am also the software lead for Georgia Tech's <a
+							href="https://hytechracing.gatech.edu/"
+							class="underline gruvbox-yellow"
+							target="_blank"
+							rel="noopener noreferrer">Formula SAE Electric team</a>, where we are building our first driverless racecar.
+				</p>
+				<p>
 
-					<p>
-						i tend to hop from one interest to another super frequently, but at the moment, i'm super down bad for the intersection of <span 
-							class="gruvbox-blue">autonomous vehicles</span
-						> & <span class="gruvbox-blue">artificial intelligence</span>.
-						nowadays you can find me writing software for GT's <a href="https://hytechracing.gatech.edu/" class="underline gruvbox-yellow" target="_blank" rel="noopener noreferrer">electric racing team</a> and exploring the limits of autonomous racing :)
-					</p>
-				</div>
-				<div class="mt-8 hidden md:block flex flex-col items-center">
-					<img
-						src="/header.png"
-						alt="Warren's profile picture"
-						class="w-64 h-64 rounded-full"
-					/>
-					<div class="mt-2 flex justify-center items-center gap-3 text-sm theme-text-secondary w-full">
-						<span style="display: inline-block;">spacex's falcon 9 rocket</span>
-					</div>
-				</div>
-			</div>
-			<div class="flex items-center justify-between text-xl">
-				<div class="flex-grow max-w-5xl">
-					<h1 class="text-4xl" style="color: #8ec07c;">
-						previously i...
-					</h1>
-					<ul class="list-disc list-inside">
-						<li>
-							led a <a
-								href="https://www.youtube.com/watch?v=Q2C3_wkqsVw"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="underline"
-								style="color: #8ec07c;"
-								>competitive robotics team</a
-							> in high school
-						</li>
-						<li>
-							spent a year flying all over the country to win
-							<a
-								href="https://devpost.com/software/talktuahbank"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="underline"
-								style="color: #8ec07c;">hackathons</a
-							> 
-						</li>
-						<li>
-							taught embedded security to high school students @ <a
-								href="https://bwsi.mit.edu/"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="underline"
-								style="color: #8ec07c;">mit</a
-							>
-						</li>
-						<li>
-							worked on <a
-								href="https://www.spacex.com/"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="underline"
-								style="color: #8ec07c;">spacex's</a
-							> flight reliability software
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="flex gap-4 mt-8">
-
+				I tend to hop from one interest to another (<span class="gruvbox-blue">web development</span>, <span class="gruvbox-blue">embedded security</span>, <span class="gruvbox-blue">mobile networking</span>.. blah blah), but I'm pretty in love with autonomous robots and cars right now. If you are doing something cool in this field, please reach out!
+				</p>
+			</section>
+			<section>
+				<h2>previously i...</h2>
+				<ul class="list-disc">
+					<li>
+						led a <a
+							href="https://www.youtube.com/watch?v=Q2C3_wkqsVw"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="underline gruvbox-green"
+							>competitive robotics team</a
+						> in high school
+					</li>
+					<li>
+						spent a year flying all over the country to win <a
+							href="https://devpost.com/software/talktuahbank"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="underline gruvbox-green">hackathons</a
+						>
+					</li>
+					<li>
+						worked on flight reliability software for <a
+							href="https://www.spacex.com/"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="underline gruvbox-green">spacex</a>
+					</li>
+					<li>
+						expanded coverage for millions of
+						 <a
+							href="https://starlink.com/business/mobile"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="underline gruvbox-green">starlink mobile</a>
+							users
+					</li>
+				</ul>
+			</section>
+			<div class="flex gap-4">
 				<a
 					href="https://github.com/warrenyun"
 					target="_blank"
@@ -274,7 +309,7 @@ import "../styles/global.css";
 					class="theme-text-muted transition-colors duration-200"
 				>
 					<svg
-						class="w-8 h-8"
+						class="w-6 h-6"
 						fill="currentColor"
 						viewBox="0 0 24 24"
 						aria-hidden="true"
@@ -292,7 +327,7 @@ import "../styles/global.css";
 					class="theme-text-muted transition-colors duration-200"
 				>
 					<svg
-						class="w-8 h-8"
+						class="w-6 h-6"
 						fill="currentColor"
 						viewBox="0 0 24 24"
 						aria-hidden="true"
@@ -309,7 +344,7 @@ import "../styles/global.css";
 					class="theme-text-muted transition-colors duration-200"
 				>
 					<svg
-						class="w-8 h-8"
+						class="w-6 h-6"
 						fill="currentColor"
 						viewBox="0 0 24 24"
 						aria-hidden="true"
@@ -320,24 +355,9 @@ import "../styles/global.css";
 					</svg>
 				</a>
 			</div>
-			<div class="mt-8">
-				<h1 class="text-sm">
-					enjoy some cool quadrotor simulations using an MPC
-					controller i wrote
-				</h1>
-				<iframe
-					class="mb-4"
-					src="https://app.rerun.io/version/0.22.0/index.html?url=https://www.wyun.sh/mpc.rrd"
-					width="100%"
-					height="700px"></iframe>
-			</div>
-
-			<p
-				class="mt-8 md:text-lg text-sm theme-contact-text"
-				id="contact-text"
-			>
+			<p class="text-base theme-contact-text" id="contact-text">
 				want to work with me? contact me at <code
-					class="theme-code-bg px-2 py-1 rounded border"
+					class="theme-code-bg rounded border text-base"
 					>wyun2006 [at] gmail [dot] com</code
 				>
 			</p>
@@ -350,15 +370,8 @@ import "../styles/global.css";
 	const themeToggle = document.getElementById("theme-toggle");
 	const sunIcon = document.getElementById("sun-icon");
 	const moonIcon = document.getElementById("moon-icon");
-	const getPreferredTheme = () => {
-		const savedTheme = localStorage.getItem("theme");
-		if (savedTheme) {
-			return savedTheme;
-		}
-		return window.matchMedia("(prefers-color-scheme: dark)").matches
-			? "dark"
-			: "light";
-	};
+	// dark is the default for everyone; only an explicit toggle changes it
+	const getPreferredTheme = () => localStorage.getItem("theme") || "dark";
 
 	const setTheme = (theme: string) => {
 		if (theme === "light") {
@@ -385,58 +398,4 @@ import "../styles/global.css";
 		setTheme(currentTheme === "dark" ? "light" : "dark");
 	});
 
-	window
-		.matchMedia("(prefers-color-scheme: dark)")
-		.addEventListener("change", (e) => {
-			setTheme(e.matches ? "dark" : "light");
-		});
-
-	const texts = [
-		"software engineer",
-		"silly robot enjoyer",
-		"hackathon tryhard",
-		"redbull addict",
-	];
-	let currentIndex = 0;
-	let isDeleting = false;
-	let charIndex = 0;
-	let typingDelay = 100;
-	let deletingDelay = 50;
-	let newTextDelay = 2000;
-
-	function typeText() {
-		const element = document.getElementById("typing-text");
-		if (!element) return;
-
-		const currentText = texts[currentIndex];
-
-		if (isDeleting) {
-			element.textContent = currentText.substring(0, charIndex - 1);
-			charIndex--;
-
-			if (charIndex === 0) {
-				isDeleting = false;
-				currentIndex = (currentIndex + 1) % texts.length;
-				setTimeout(typeText, newTextDelay);
-				return;
-			}
-
-			setTimeout(typeText, deletingDelay);
-		} else {
-			element.textContent = currentText.substring(0, charIndex + 1);
-			charIndex++;
-
-			if (charIndex === currentText.length) {
-				isDeleting = true;
-				setTimeout(typeText, newTextDelay);
-				return;
-			}
-
-			setTimeout(typeText, typingDelay);
-		}
-	}
-
-	window.addEventListener("DOMContentLoaded", () => {
-		setTimeout(typeText, newTextDelay);
-	});
 </script>

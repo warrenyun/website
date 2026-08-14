@@ -6,34 +6,6 @@
 
 @import "tailwindcss";
 
-#typing-text {
-	border-right: 2px solid #fff;
-	overflow: hidden;
-	display: inline;
-	position: relative;
-	vertical-align: baseline;
-	white-space: nowrap;
-}
-
-#typing-text::after {
-	content: "";
-	position: absolute;
-	right: 0;
-	top: 0;
-	height: 100%;
-	width: 2px;
-	background-color: #fff;
-	animation: blink-caret 0.75s step-end infinite;
-}
-
-@keyframes blink-caret {
-	from, to { background-color: transparent }
-	50% { background-color: #000 }
-}
-
-:root {
-
-}
 @font-face {
 	font-family: 'Atkinson';
 	src: url('/fonts/atkinson-regular.woff') format('woff');
