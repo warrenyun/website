@@ -1,0 +1,146 @@
+---
+const EULER_LAGRANGE = `<math xmlns="http://www.w3.org/1998/Math/MathML">
+	<mfrac><mrow><mi>&#8706;</mi><mi>L</mi></mrow><mrow><mi>&#8706;</mi><msub><mi>q</mi><mi>i</mi></msub></mrow></mfrac>
+	<mo>&#8722;</mo>
+	<mfrac><mi>d</mi><mrow><mi>d</mi><mi>t</mi></mrow></mfrac>
+	<mrow>
+		<mo>(</mo>
+		<mfrac><mrow><mi>&#8706;</mi><mi>L</mi></mrow><mrow><mi>&#8706;</mi><msub><mover><mi>q</mi><mo>&#775;</mo></mover><mi>i</mi></msub></mrow></mfrac>
+		<mo>)</mo>
+	</mrow>
+	<mo>=</mo>
+	<mn>0</mn>
+</math>`;
+
+const EULER_IDENTITY = `<math xmlns="http://www.w3.org/1998/Math/MathML">
+	<msup><mi>e</mi><mrow><mi>i</mi><mi>&#960;</mi></mrow></msup>
+	<mo>+</mo>
+	<mn>1</mn>
+</math>`;
+
+// optional 3rd entry: markup revealed when the value is clicked
+const favorites: [string, string, string?][] = [
+	['text editor', '`helix`'],
+	['window manager', 'niri'],
+	['build system', '`nix`'],
+	['terminal multiplexer', '`zellij`'],
+	['TUI', '`btop`'],
+	['equation', 'euler lagrange', EULER_LAGRANGE],
+	['math lore', 'the brachistochrone problem'],
+	['numerical constant', EULER_IDENTITY],
+	['IETF RFC', 'RFC 2795', 'The Infinite Monkey Protocol Suite (IMPS)'],
+	['communication protocol', 'SCTP'],
+	['authentication method', 'EAP-AKA'],
+	['music genre', 'jpop'],
+	['vintage tech', 'sony cfs-3000'],
+	['modern tech', 'framework laptop 13'],
+	['color theme', 'gruvbox material dark'],
+	['mode of transporation', 'onewheel'],
+];
+
+const parts = (value: string) => value.split('`');
+---
+
+<dl class="fav">
+	{
+		favorites.map(([category, value, reveal]) => (
+			<>
+				<dt>{category}</dt>
+				<dd>
+					{reveal ? (
+						<button class="fav-toggle" type="button" aria-expanded="false">
+							<span class="fav-label">
+								{parts(value).map((part, i) => (i % 2 ? <code>{part}</code> : part))}
+							</span>
+							<span class="fav-alt" set:html={reveal} />
+						</button>
+					) : value.startsWith('<math') ? (
+						<span class="fav-math" set:html={value} />
+					) : (
+						parts(value).map((part, i) => (i % 2 ? <code>{part}</code> : part))
+					)}
+				</dd>
+			</>
+		))
+	}
+</dl>
+
+<style>
+	.fav {
+		--fav-muted: #a89984;
+		--fav-value: #ebdbb2;
+		--fav-code-bg: #3c3836;
+		--fav-code-border: #504945;
+
+		display: grid;
+		grid-template-columns: auto 1fr;
+		column-gap: 1.75rem;
+		row-gap: 0.4rem;
+		margin-top: 1.5rem;
+		margin-bottom: 0;
+	}
+
+	html.light .fav {
+		--fav-muted: #7c6f64;
+		--fav-value: #3c3836;
+		--fav-code-bg: #ebdbb2;
+		--fav-code-border: #d5c4a1;
+	}
+
+	.fav dt {
+		color: var(--fav-muted);
+	}
+	.fav dd {
+		margin: 0;
+		color: var(--fav-value);
+	}
+	.fav code {
+		padding: 0.05rem 0.35rem;
+		border: 1px solid var(--fav-code-border);
+		border-radius: 0.25rem;
+		background-color: var(--fav-code-bg);
+		font-size: 0.9em;
+	}
+
+	.fav-toggle {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		text-decoration: underline dotted;
+		text-underline-offset: 0.2em;
+		cursor: pointer;
+	}
+	/* set on the wrapper, not the math itself — scoped styles miss set:html content */
+	.fav-alt,
+	.fav-math {
+		font-family: math, "Latin Modern Math", "STIX Two Math", serif;
+	}
+	.fav-alt {
+		display: none;
+	}
+	.fav-toggle[aria-expanded='true'] .fav-label {
+		display: none;
+	}
+	.fav-toggle[aria-expanded='true'] .fav-alt {
+		display: inline;
+	}
+
+	@media (max-width: 640px) {
+		.fav {
+			column-gap: 1rem;
+			row-gap: 0.45rem;
+			font-size: 1rem;
+		}
+	}
+</style>
+
+<script>
+	document.querySelectorAll('.fav-toggle').forEach((btn) =>
+		btn.addEventListener('click', () =>
+			btn.setAttribute('aria-expanded', String(btn.getAttribute('aria-expanded') !== 'true')),
+		),
+	);
+</script>

@@ -1,5 +1,8 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
+import NowPlaying from "../components/NowPlaying.astro";
+import Favorites from "../components/Favorites.astro";
+import GpgKey from "../components/GpgKey.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import "../styles/global.css";
 ---
@@ -193,11 +196,9 @@ import "../styles/global.css";
 				padding-left: 1.15rem;
 			}
 
-			/* between blocks */
 			main > * + * {
 				margin-top: 2.5rem;
 			}
-			/* inside a block */
 			section > * + * {
 				margin-top: 0.85rem;
 			}
@@ -212,6 +213,19 @@ import "../styles/global.css";
 				/* keep the border/padding intact when it wraps on narrow screens */
 				-webkit-box-decoration-break: clone;
 				box-decoration-break: clone;
+			}
+
+			.mobile-break {
+				display: none;
+			}
+
+			@media (max-width: 640px) {
+				li {
+					font-size: 1rem;
+				}
+				.mobile-break {
+					display: inline;
+				}
 			}
 		</style>
 	</head>
@@ -245,7 +259,7 @@ import "../styles/global.css";
 			<section>
 				<h1 class="theme-text-primary">warren yun</h1>
 				<p>
-					Hi. I like to make cool things with software!
+					Hi. I like to make things and solve cool problems!
 				</p>
 				<p>
 					Right now, I am working on self-driving cars at <a
@@ -256,7 +270,7 @@ import "../styles/global.css";
 							href="https://hytechracing.gatech.edu/"
 							class="underline gruvbox-yellow"
 							target="_blank"
-							rel="noopener noreferrer">Formula SAE Electric team</a>, where we are building our first driverless racecar.
+							rel="noopener noreferrer">Formula SAE Electric team</a>, building our first driverless racecar.
 				</p>
 				<p>
 
@@ -300,6 +314,10 @@ import "../styles/global.css";
 							users
 					</li>
 				</ul>
+			</section>
+			<section>
+				<h2>some assorted favorites</h2>
+				<Favorites />
 			</section>
 			<div class="flex gap-4">
 				<a
@@ -356,12 +374,15 @@ import "../styles/global.css";
 				</a>
 			</div>
 			<p class="text-base theme-contact-text" id="contact-text">
-				want to work with me? contact me at <code
+				want to work with me? contact me at <br class="mobile-break" /><code
 					class="theme-code-bg rounded border text-base"
 					>wyun2006 [at] gmail [dot] com</code
 				>
 			</p>
+
+			<GpgKey />
 		</main>
+		<NowPlaying />
 	</body>
 </html>
 
@@ -388,10 +409,8 @@ import "../styles/global.css";
 		localStorage.setItem("theme", theme);
 	};
 
-	// Set initial theme
 	setTheme(getPreferredTheme());
 
-	// Add click handler
 	themeToggle?.addEventListener("click", () => {
 		const currentTheme =
 			localStorage.getItem("theme") || getPreferredTheme();

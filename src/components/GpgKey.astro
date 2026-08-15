@@ -1,0 +1,169 @@
+---
+const GPG_KEY = `-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mDMEaoArORYJKwYBBAHaRw8BAQdANyo1hrOd13gC89N0G/WMSixg2ns9um+DkRq4
+9nc8vDS0H1dhcnJlbiBZdW4gPHd5dW4yMDA2QGdtYWlsLmNvbT6IlgQTFgoAPhYh
+BLn//0s4iUeEdjT395nGoPnXLIgHBQJqgCs5AhsDBQkFo5qABQsJCAcCBhUKCQgL
+AgQWAgMBAh4BAheAAAoJEJnGoPnXLIgHFvABAOkdBZYbkl58rc9Nobrbgb4JOceH
+F163dy84ZWhqUzljAQC87Srgy87SQMFSpNOgbo2ox63b8fFz14FQ14fwHbbRBrg4
+BGqAKzkSCisGAQQBl1UBBQEBB0D2BaI/iskZpj4YNQPjhHN2QfQbibzeQNf7Dq16
+ZyVQJwMBCAeIfgQYFgoAJhYhBLn//0s4iUeEdjT395nGoPnXLIgHBQJqgCs5AhsM
+BQkFo5qAAAoJEJnGoPnXLIgHp1YBAPsyMp4MFDC++Dq0FZVGqcY16HzfJUm0CP3x
+YDSLcJzHAP0bvp96+xsvsr24JSjespW3tyAI5wrozckj350WLEOBAQ==
+=xJPZ
+-----END PGP PUBLIC KEY BLOCK-----`;
+---
+
+<details class="gpg">
+	<summary>
+		<svg class="gpg-caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1l7 5-7 5z"></path></svg>
+		My public GPG key.
+	</summary>
+	<div class="gpg-body">
+		<pre><code class="gpg-text">{GPG_KEY}</code></pre>
+		<button class="gpg-copy" type="button" aria-label="Copy GPG key" title="copy">
+			<svg class="gpg-icon gpg-icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+				<rect x="9" y="9" width="11" height="11" rx="2"></rect>
+				<path d="M5 15V5a2 2 0 012-2h10" stroke-linecap="round"></path>
+			</svg>
+			<svg class="gpg-icon gpg-icon-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+				<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+			</svg>
+		</button>
+	</div>
+</details>
+
+<style>
+	.gpg {
+		--gpg-muted: #a89984;
+		--gpg-text: #d5c4a1;
+		--gpg-bg: #3c3836;
+		--gpg-border: #504945;
+		--gpg-accent: #8ec07c;
+
+		display: block;
+		margin-top: 1rem;
+		font-size: 0.95rem;
+	}
+
+	html.light .gpg {
+		--gpg-muted: #7c6f64;
+		--gpg-text: #504945;
+		--gpg-bg: #ebdbb2;
+		--gpg-border: #d5c4a1;
+		--gpg-accent: #427b58;
+	}
+
+	.gpg summary {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		width: fit-content;
+		padding: 0.15rem 0;
+		color: var(--gpg-muted);
+		cursor: pointer;
+		list-style: none;
+	}
+	.gpg summary::-webkit-details-marker {
+		display: none;
+	}
+	.gpg-caret {
+		flex: none;
+		width: 0.6rem;
+		height: 0.6rem;
+		fill: currentColor;
+		transition: transform 0.2s ease;
+	}
+	.gpg[open] .gpg-caret {
+		transform: rotate(90deg);
+	}
+
+	/* fit-content keeps the box only as wide as the 64-char armored lines */
+	.gpg-body {
+		position: relative;
+		width: fit-content;
+		max-width: 100%;
+		margin-top: 0.6rem;
+	}
+
+	.gpg pre {
+		max-height: 18rem;
+		margin: 0;
+		padding: 0.7rem 2.4rem 0.7rem 0.8rem;
+		overflow: auto;
+		border: 1px solid var(--gpg-border);
+		border-radius: 0.4rem;
+		background-color: var(--gpg-bg);
+	}
+	.gpg code {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--gpg-text);
+		font-size: 0.82rem;
+		line-height: 1.5;
+		white-space: pre;
+	}
+
+	.gpg-copy {
+		position: absolute;
+		top: 0.4rem;
+		right: 0.4rem;
+		display: flex;
+		padding: 0.35rem;
+		border: 0;
+		border-radius: 0.3rem;
+		background-color: var(--gpg-bg);
+		color: var(--gpg-muted);
+		cursor: pointer;
+	}
+	.gpg-copy:hover {
+		color: var(--gpg-text);
+	}
+	.gpg-icon {
+		width: 1rem;
+		height: 1rem;
+	}
+	.gpg-icon-done,
+	.gpg-copy[data-copied] .gpg-icon-copy {
+		display: none;
+	}
+	.gpg-copy[data-copied] .gpg-icon-done {
+		display: block;
+		color: var(--gpg-accent);
+	}
+
+	@media (max-width: 640px) {
+		.gpg-copy {
+			padding: 0.5rem;
+		}
+		.gpg-icon {
+			width: 1.1rem;
+			height: 1.1rem;
+		}
+	}
+</style>
+
+<script>
+	const btn = document.querySelector('.gpg-copy') as HTMLButtonElement | null;
+	const key = document.querySelector('.gpg-text');
+
+	btn?.addEventListener('click', async () => {
+		try {
+			await navigator.clipboard.writeText(key?.textContent ?? '');
+			btn.setAttribute('data-copied', '');
+			btn.title = 'copied';
+			setTimeout(() => {
+				btn.removeAttribute('data-copied');
+				btn.title = 'copy';
+			}, 1600);
+		} catch {
+			// clipboard api needs a secure context; fall back to selecting it for the user
+			const range = document.createRange();
+			if (key) range.selectNodeContents(key);
+			const sel = getSelection();
+			sel?.removeAllRanges();
+			sel?.addRange(range);
+		}
+	});
+</script>

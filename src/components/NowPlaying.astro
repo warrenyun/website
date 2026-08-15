@@ -1,0 +1,287 @@
+---
+---
+
+<div id="now-playing" class="np" hidden>
+	<a
+		class="np-link"
+		href="#"
+		target="_blank"
+		rel="noopener noreferrer"
+		aria-label="Currently playing on Spotify"
+	>
+		<img class="np-art" alt="" width="44" height="44" />
+		<div class="np-meta">
+			<span class="np-label">
+				<svg class="np-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+					<path
+						d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"
+					></path>
+				</svg>
+				warren's listening to
+			</span>
+			<span class="np-title"></span>
+			<span class="np-sub">
+				<span class="np-artist"></span>
+				<span class="np-time"></span>
+			</span>
+		</div>
+	</a>
+	<button class="np-close" type="button" aria-label="Hide now playing">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+			<path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+		</svg>
+	</button>
+	<span class="np-progress"><span class="np-progress-fill"></span></span>
+</div>
+
+<style is:global>
+	body:has(#now-playing:not([hidden])) {
+		padding-bottom: 9rem;
+	}
+	@media (max-width: 640px) {
+		body:has(#now-playing:not([hidden])) {
+			padding-bottom: calc(8.5rem + env(safe-area-inset-bottom, 0px));
+		}
+	}
+</style>
+
+<style>
+	.np {
+		--np-bg: #3c3836;
+		--np-border: #504945;
+		--np-title: #fbf1c7;
+		--np-muted: #a89984;
+		--np-accent: #8ec07c;
+		--np-track: rgba(168, 153, 132, 0.28);
+
+		position: fixed;
+		bottom: 1.25rem;
+		right: 1.25rem;
+		z-index: 40;
+
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		width: 18rem;
+		padding: 0.55rem 0.6rem 0.65rem 0.7rem;
+
+		background-color: var(--np-bg);
+		border: 1px solid var(--np-border);
+		border-radius: 0.6rem;
+		overflow: hidden;
+
+		opacity: 0;
+		transform: translateY(1.25rem);
+		transition:
+			opacity 0.4s ease,
+			transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.np[data-loaded] {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	html.light .np {
+		--np-bg: #ebdbb2;
+		--np-border: #d5c4a1;
+		--np-title: #282828;
+		--np-muted: #7c6f64;
+		--np-accent: #427b58;
+		--np-track: rgba(124, 111, 100, 0.28);
+	}
+
+	.np-link {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		min-width: 0;
+		flex: 1 1 auto;
+		text-decoration: none;
+	}
+
+	.np-art {
+		flex: none;
+		width: 44px;
+		height: 44px;
+		border-radius: 4px;
+		object-fit: cover;
+		background-color: var(--np-track);
+	}
+
+	.np-meta {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.1rem;
+		min-width: 0;
+		flex: 1 1 auto;
+		line-height: 1.3;
+	}
+	.np-label {
+		display: flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: 0.65rem;
+		color: var(--np-muted);
+	}
+	.np-mark {
+		flex: none;
+		width: 0.7rem;
+		height: 0.7rem;
+		color: var(--np-accent);
+	}
+	.np-title,
+	.np-artist {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.np-title {
+		font-size: 0.8rem;
+		color: var(--np-title);
+	}
+	.np-sub {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		min-width: 0;
+		font-size: 0.7rem;
+		color: var(--np-muted);
+	}
+	.np-time {
+		flex: none;
+		margin-left: auto;
+		font-size: 0.65rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.np-close {
+		flex: none;
+		align-self: flex-start;
+		display: flex;
+		padding: 0.15rem;
+		margin: -0.15rem -0.1rem 0 0;
+		border: 0;
+		background: none;
+		color: var(--np-muted);
+		cursor: pointer;
+	}
+	.np-close svg {
+		width: 0.8rem;
+		height: 0.8rem;
+	}
+	.np-close:hover {
+		color: var(--np-title);
+	}
+
+	.np-progress {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 2px;
+		background-color: var(--np-track);
+	}
+	.np-progress-fill {
+		display: block;
+		height: 100%;
+		width: 0;
+		background-color: var(--np-accent);
+	}
+
+	@media (max-width: 640px) {
+		.np {
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: auto;
+			border-radius: 0;
+			border-left: 0;
+			border-right: 0;
+			border-bottom: 0;
+			padding: 0.7rem 0.9rem calc(0.8rem + env(safe-area-inset-bottom, 0px));
+		}
+		.np-meta {
+			gap: 0.28rem;
+		}
+		.np-progress {
+			bottom: env(safe-area-inset-bottom, 0px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.np {
+			transition: opacity 0.2s ease;
+			transform: none;
+		}
+		.np[data-loaded] {
+			transform: none;
+		}
+	}
+</style>
+
+<script>
+	type NowPlaying = {
+		isPlaying: boolean;
+		title?: string;
+		artist?: string;
+		albumArt?: string | null;
+		url?: string | null;
+		progressMs?: number;
+		durationMs?: number;
+	};
+
+	const clock = (ms: number) => {
+		const total = Math.floor(ms / 1000);
+		return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+	};
+
+	const render = (data: NowPlaying) => {
+		const card = document.getElementById('now-playing');
+		if (!card || !data.isPlaying || !data.title) return;
+
+		const link = card.querySelector('.np-link') as HTMLAnchorElement;
+		const art = card.querySelector('.np-art') as HTMLImageElement;
+		const fill = card.querySelector('.np-progress-fill') as HTMLElement;
+
+		card.querySelector('.np-title')!.textContent = data.title;
+		card.querySelector('.np-artist')!.textContent = data.artist ?? '';
+
+		link.title = data.artist ? `${data.title} — ${data.artist}` : data.title;
+
+		if (data.albumArt) {
+			art.src = data.albumArt;
+			art.alt = `${data.title} album art`;
+			art.addEventListener('error', () => art.remove());
+		} else {
+			art.remove();
+		}
+
+		if (data.url) link.href = data.url;
+		else link.removeAttribute('href');
+
+		const { progressMs = 0, durationMs = 0 } = data;
+		if (durationMs > 0) {
+			card.querySelector('.np-time')!.textContent =
+				`${clock(progressMs)} / ${clock(durationMs)}`;
+			fill.style.width = `${Math.min(100, (progressMs / durationMs) * 100)}%`;
+		}
+
+		card.querySelector('.np-close')!.addEventListener('click', () => {
+			card.removeAttribute('data-loaded');
+			setTimeout(() => (card.hidden = true), 450);
+		});
+
+		card.hidden = false;
+		// force a paint of the hidden state, or the transition is skipped entirely
+		void card.offsetHeight;
+		requestAnimationFrame(() =>
+			requestAnimationFrame(() => card.setAttribute('data-loaded', '')),
+		);
+	};
+
+	fetch('/api/spotify')
+		.then((res) => (res.ok ? res.json() : null))
+		.then((data) => data && render(data))
+		.catch(() => {});
+</script>

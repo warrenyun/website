@@ -25,3 +25,9 @@ pnpm-debug.log*
 .idea/
 
 .vscode/
+
+# vercel build output
+.vercel/
+
+# local one-off: mints the spotify refresh token, never needed at build/runtime
+scripts/spotify-auth.mjs
