@@ -67,38 +67,27 @@ const parts = (value: string) => value.split('`');
 
 <style>
 	.fav {
-		--fav-muted: #a89984;
-		--fav-value: #ebdbb2;
-		--fav-code-bg: #3c3836;
-		--fav-code-border: #504945;
-
 		display: grid;
 		grid-template-columns: auto 1fr;
 		column-gap: 1.75rem;
 		row-gap: 0.4rem;
-		margin-top: 1.5rem;
+		/* same gap under the heading as the "previously i..." list */
+		margin-top: 0.85rem;
 		margin-bottom: 0;
 	}
 
-	html.light .fav {
-		--fav-muted: #7c6f64;
-		--fav-value: #3c3836;
-		--fav-code-bg: #ebdbb2;
-		--fav-code-border: #d5c4a1;
-	}
-
 	.fav dt {
-		color: var(--fav-muted);
+		color: var(--fg4);
 	}
 	.fav dd {
 		margin: 0;
-		color: var(--fav-value);
+		color: var(--fg);
 	}
 	.fav code {
 		padding: 0.05rem 0.35rem;
-		border: 1px solid var(--fav-code-border);
+		border: 1px solid var(--bg2);
 		border-radius: 0.25rem;
-		background-color: var(--fav-code-bg);
+		background-color: var(--bg1);
 		font-size: 0.9em;
 	}
 

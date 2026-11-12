@@ -1,0 +1,10 @@
+---
+// a muted looping clip that stays idle until something calls play().
+// preload="none" means nothing but the poster is fetched up front.
+interface Props {
+	m: { src: string; poster: string };
+}
+const { m } = Astro.props;
+---
+
+<video class="frame" src={m.src} poster={m.poster} muted loop playsinline preload="none" />

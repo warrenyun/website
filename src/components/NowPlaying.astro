@@ -47,11 +47,6 @@
 
 <style>
 	.np {
-		--np-bg: #3c3836;
-		--np-border: #504945;
-		--np-title: #fbf1c7;
-		--np-muted: #a89984;
-		--np-accent: #8ec07c;
 		--np-track: rgba(168, 153, 132, 0.28);
 
 		position: fixed;
@@ -65,8 +60,8 @@
 		width: 18rem;
 		padding: 0.55rem 0.6rem 0.65rem 0.7rem;
 
-		background-color: var(--np-bg);
-		border: 1px solid var(--np-border);
+		background-color: var(--bg1);
+		border: 1px solid var(--bg2);
 		border-radius: 0.6rem;
 		overflow: hidden;
 
@@ -79,15 +74,6 @@
 	.np[data-loaded] {
 		opacity: 1;
 		transform: translateY(0);
-	}
-
-	html.light .np {
-		--np-bg: #ebdbb2;
-		--np-border: #d5c4a1;
-		--np-title: #282828;
-		--np-muted: #7c6f64;
-		--np-accent: #427b58;
-		--np-track: rgba(124, 111, 100, 0.28);
 	}
 
 	.np-link {
@@ -122,13 +108,13 @@
 		align-items: center;
 		gap: 0.3rem;
 		font-size: 0.65rem;
-		color: var(--np-muted);
+		color: var(--fg4);
 	}
 	.np-mark {
 		flex: none;
 		width: 0.7rem;
 		height: 0.7rem;
-		color: var(--np-accent);
+		color: var(--green);
 	}
 	.np-title,
 	.np-artist {
@@ -138,7 +124,7 @@
 	}
 	.np-title {
 		font-size: 0.8rem;
-		color: var(--np-title);
+		color: var(--fg1);
 	}
 	.np-sub {
 		display: flex;
@@ -146,7 +132,7 @@
 		gap: 0.5rem;
 		min-width: 0;
 		font-size: 0.7rem;
-		color: var(--np-muted);
+		color: var(--fg4);
 	}
 	.np-time {
 		flex: none;
@@ -163,7 +149,7 @@
 		margin: -0.15rem -0.1rem 0 0;
 		border: 0;
 		background: none;
-		color: var(--np-muted);
+		color: var(--fg4);
 		cursor: pointer;
 	}
 	.np-close svg {
@@ -171,7 +157,7 @@
 		height: 0.8rem;
 	}
 	.np-close:hover {
-		color: var(--np-title);
+		color: var(--fg1);
 	}
 
 	.np-progress {
@@ -186,7 +172,7 @@
 		display: block;
 		height: 100%;
 		width: 0;
-		background-color: var(--np-accent);
+		background-color: var(--green);
 	}
 
 	@media (max-width: 640px) {

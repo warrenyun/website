@@ -1,0 +1,203 @@
+---
+// a mosaic of muted clips that all play while on screen.
+// clips are made with scripts/clip.sh; `area` places each tile in the grid below.
+const reel: { name: string; label: string; area: string }[] = [
+	{ name: "dv-car", label: "hytech's first driverless racecar", area: "a" },
+	{ name: "comma", label: "comma's e2e nav model", area: "b" },
+	{ name: "robotics", label: "frc 1155", area: "c" },
+	{ name: "dv-viz", label: "foxglove viz. of slam and planning", area: "d" },
+	{ name: "robotics-arm", label: "trajopt on a 3 dof arm", area: "f" },
+	{ name: "period", label: "e2e parking model", area: "g" },
+];
+---
+
+<div class="reel">
+	{
+		reel.map((r) => (
+			<figure class="tile" style={`grid-area: ${r.area}`} data-label={r.label}>
+				<video
+					src={`/media/${r.name}.mp4`}
+					poster={`/media/${r.name}.jpg`}
+					muted
+					loop
+					playsinline
+					preload="metadata"
+				/>
+				<figcaption>{r.label}</figcaption>
+			</figure>
+		))
+	}
+</div>
+
+<dialog class="reel-big">
+	<figure>
+		<div class="stage"></div>
+		<figcaption><span class="cap"></span><span>esc</span></figcaption>
+	</figure>
+</dialog>
+
+<style>
+	.reel {
+		display: grid;
+		/* short rows so each tile can be sized close to its clip's shape (f is portrait, g near-square) */
+		grid-template-columns: repeat(8, 1fr);
+		grid-auto-rows: 2.3rem;
+		gap: 0.45rem;
+		grid-template-areas:
+			"a a a a a g g g"
+			"a a a a a g g g"
+			"a a a a a g g g"
+			"a a a a a g g g"
+			"a a a a a g g g"
+			"a a a a a g g g"
+			"c c c f f b b b"
+			"c c c f f b b b"
+			"c c c f f b b b"
+			"d d d f f b b b"
+			"d d d f f b b b"
+			"d d d f f b b b";
+		/* same gap above as the sections get between them */
+		margin-top: 2.5rem;
+	}
+	.tile {
+		position: relative;
+		margin: 0;
+		overflow: hidden;
+		border-radius: 6px;
+		background: var(--bg1);
+		cursor: zoom-in;
+		transition: opacity 250ms ease;
+	}
+	.tile video {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 0;
+	}
+	.tile figcaption {
+		position: absolute;
+		inset: auto 0 0 0;
+		padding: 1.25rem 0.55rem 0.35rem;
+		font-size: 0.75rem;
+		line-height: 1.2;
+		color: #fbf1c7;
+		background: linear-gradient(transparent, rgb(29 32 33 / 0.75));
+		opacity: 0;
+		transition: opacity 200ms ease;
+	}
+	.tile:hover figcaption {
+		opacity: 1;
+	}
+	/* hovering one tile quietly steps the others back */
+	.reel:hover .tile:not(:hover) {
+		opacity: 0.45;
+	}
+	@media (hover: none) {
+		.tile figcaption {
+			opacity: 1;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.reel {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-areas:
+				"a a"
+				"a a"
+				"a a"
+				"a a"
+				"a a"
+				"g b"
+				"g b"
+				"g b"
+				"g b"
+				"c f"
+				"c f"
+				"c f"
+				"d f"
+				"d f"
+				"d f";
+		}
+	}
+
+	.reel-big {
+		--reel-scrim: rgb(29 32 33 / 0.86);
+
+		width: min(92vw, 52rem);
+		max-width: none;
+		margin: auto;
+		padding: 0;
+		border: 0;
+		background: none;
+		overflow: visible;
+	}
+	.reel-big:focus {
+		outline: none;
+	}
+	.reel-big[open] {
+		animation: rise 200ms ease;
+	}
+	.reel-big::backdrop {
+		background: var(--reel-scrim);
+		backdrop-filter: blur(3px);
+	}
+	.reel-big figure {
+		margin: 0;
+	}
+	.reel-big figcaption {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 0.5rem;
+		font-size: 0.9rem;
+		color: var(--fg4);
+	}
+	/* the clone is inserted at runtime, so it needs :global to be styled */
+	.reel-big .stage :global(video) {
+		display: block;
+		width: 100%;
+		max-height: 80vh;
+		object-fit: contain;
+		border-radius: 6px;
+		background: #000;
+	}
+	@keyframes rise {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+	}
+</style>
+
+<script>
+	// respect reduced motion: posters only, nothing autoplays
+	const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+	// everything on screen plays, everything off screen pauses
+	const io = new IntersectionObserver((entries) =>
+		entries.forEach(({ target, isIntersecting }) => {
+			const vid = target as HTMLVideoElement;
+			if (isIntersecting && !calm) vid.play().catch(() => {});
+			else vid.pause();
+		}),
+	);
+	document.querySelectorAll(".reel video").forEach((vid) => io.observe(vid));
+
+	// click a tile to see it big, picking up from the frame it was on
+	const big = document.querySelector<HTMLDialogElement>(".reel-big")!;
+	const stage = big.querySelector(".stage")!;
+	document.querySelectorAll<HTMLElement>(".reel .tile").forEach((tile) =>
+		tile.addEventListener("click", () => {
+			const src = tile.querySelector("video")!;
+			const copy = src.cloneNode() as HTMLVideoElement;
+			stage.replaceChildren(copy);
+			big.querySelector(".cap")!.textContent = tile.dataset.label ?? "";
+			big.showModal();
+			copy.currentTime = src.currentTime;
+			if (!calm) copy.play().catch(() => {});
+		}),
+	);
+	// clicks on the dimmed backdrop land on the dialog itself
+	big.addEventListener("click", (e) => e.target === big && big.close());
+	big.addEventListener("close", () => stage.replaceChildren());
+</script>

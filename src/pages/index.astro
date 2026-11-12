@@ -1,420 +1,236 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
+import Page from "../layouts/Page.astro";
 import NowPlaying from "../components/NowPlaying.astro";
 import Favorites from "../components/Favorites.astro";
+import Reel from "../components/Reel.astro";
 import GpgKey from "../components/GpgKey.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import "../styles/global.css";
+
+const friends: [string, string][] = [
+	["Ashray", "https://www.ashray.sh/"],
+	["Asa", "https://anglesideangle.dev/"],
+	["Joey", "https://jlruan.me/"],
+	["Rohan", "https://www.rohankalia.dev/"],
+	["Divij", "https://www.divij.vc/"],
+];
 ---
 
-<!doctype html>
-<html lang="en" class="h-screen dark" id="html-root">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			:root {
-				--gruvbox-dark-bg: #282828;
-				--gruvbox-dark-bg1: #3c3836;
-				--gruvbox-dark-bg2: #504945;
-				--gruvbox-dark-fg: #ebdbb2;
-				--gruvbox-dark-fg1: #fbf1c7;
-				--gruvbox-dark-fg2: #d5c4a1;
-				--gruvbox-dark-fg3: #bdae93;
-				--gruvbox-dark-fg4: #a89984;
-
-				--gruvbox-light-bg: #fbf1c7;
-				--gruvbox-light-bg1: #ebdbb2;
-				--gruvbox-light-bg2: #d5c4a1;
-				--gruvbox-light-fg: #3c3836;
-				--gruvbox-light-fg1: #282828;
-				--gruvbox-light-fg2: #504945;
-				--gruvbox-light-fg3: #665c54;
-				--gruvbox-light-fg4: #7c6f64;
-			}
-
-			html.dark {
-				background-color: var(--gruvbox-dark-bg);
-				color: var(--gruvbox-dark-fg);
-			}
-
-			html.light {
-				background-color: var(--gruvbox-light-bg);
-				color: var(--gruvbox-light-fg);
-			}
-
-			.gruvbox-dark-bg {
-				background-color: var(--gruvbox-dark-bg);
-			}
-			.gruvbox-dark-bg1 {
-				background-color: var(--gruvbox-dark-bg1);
-			}
-			.gruvbox-dark-bg2 {
-				background-color: var(--gruvbox-dark-bg2);
-			}
-			.gruvbox-dark-fg {
-				color: var(--gruvbox-dark-fg);
-			}
-			.gruvbox-dark-fg1 {
-				color: var(--gruvbox-dark-fg1);
-			}
-			.gruvbox-dark-fg2 {
-				color: var(--gruvbox-dark-fg2);
-			}
-			.gruvbox-dark-fg3 {
-				color: var(--gruvbox-dark-fg3);
-			}
-			.gruvbox-dark-fg4 {
-				color: var(--gruvbox-dark-fg4);
-			}
-
-			.gruvbox-light-bg {
-				background-color: var(--gruvbox-light-bg);
-			}
-			.gruvbox-light-bg1 {
-				background-color: var(--gruvbox-light-bg1);
-			}
-			.gruvbox-light-bg2 {
-				background-color: var(--gruvbox-light-bg2);
-			}
-			.gruvbox-light-fg {
-				color: var(--gruvbox-light-fg);
-			}
-			.gruvbox-light-fg1 {
-				color: var(--gruvbox-light-fg1);
-			}
-			.gruvbox-light-fg2 {
-				color: var(--gruvbox-light-fg2);
-			}
-			.gruvbox-light-fg3 {
-				color: var(--gruvbox-light-fg3);
-			}
-			.gruvbox-light-fg4 {
-				color: var(--gruvbox-light-fg4);
-			}
-
-			html.dark .theme-bg {
-				background-color: var(--gruvbox-dark-bg1);
-			}
-			html.dark .theme-bg:hover {
-				background-color: var(--gruvbox-dark-bg2);
-			}
-			html.light .theme-bg {
-				background-color: var(--gruvbox-light-bg1);
-			}
-			html.light .theme-bg:hover {
-				background-color: var(--gruvbox-light-bg2);
-			}
-
-			html.dark .theme-text-primary {
-				color: var(--gruvbox-dark-fg1);
-			}
-			html.light .theme-text-primary {
-				color: var(--gruvbox-light-fg1);
-			}
-
-			html.dark .theme-text-secondary {
-				color: var(--gruvbox-dark-fg2);
-			}
-			html.light .theme-text-secondary {
-				color: var(--gruvbox-light-fg2);
-			}
-
-			html.dark .theme-text-muted {
-				color: var(--gruvbox-dark-fg4);
-			}
-			html.light .theme-text-muted {
-				color: var(--gruvbox-light-fg4);
-			}
-
-			html.dark .theme-text-muted:hover {
-				color: var(--gruvbox-dark-fg2);
-			}
-			html.light .theme-text-muted:hover {
-				color: var(--gruvbox-light-fg2);
-			}
-
-			html.dark .theme-code-bg {
-				background-color: var(--gruvbox-dark-bg1);
-				border-color: var(--gruvbox-dark-bg2);
-			}
-			html.light .theme-code-bg {
-				background-color: var(--gruvbox-light-bg1);
-				border-color: var(--gruvbox-light-bg2);
-			}
-
-			html.dark .theme-contact-text {
-				color: var(--gruvbox-dark-fg3);
-			}
-			html.light .theme-contact-text {
-				color: var(--gruvbox-light-fg3);
-			}
-
-			html.dark .gruvbox-blue {	
-				color: #83a598;
-			}
-			html.light .gruvbox-blue {
-				color: #076678;
-			}
-
-			html.dark .gruvbox-yellow {
-				color: #f6c657;
-			}
-			html.light .gruvbox-yellow {
-				color: #c18401;
-			}
-
-			html.dark .gruvbox-green {
-				color: #8ec07c;
-			}
-			html.light .gruvbox-green {
-				color: #427b58;
-			}
-
-			/*
-			  the page owns its own rhythm/sizing. these rules are unlayered, so
-			  they beat both global.css and tailwind's @layer utilities — keep the
-			  vertical spacing here rather than in space-y-* classes.
-			*/
-			body {
-				padding: 6rem 1.5rem 4rem;
-			}
-			main,
-			p,
-			h1,
-			h2,
-			ul {
-				margin: 0;
-				padding: 0;
-			}
-			h1 {
-				font-size: 1.875rem;
-			}
-			h2 {
-				font-size: 1.125rem;
-			}
-			ul {
-				padding-left: 1.15rem;
-			}
-
-			main > * + * {
-				margin-top: 2.5rem;
-			}
-			section > * + * {
-				margin-top: 0.85rem;
-			}
-			h1 + p {
-				margin-top: 1.25rem;
-			}
-			li + li {
-				margin-top: 0.35rem;
-			}
-			code {
-				padding: 0.1rem 0.4rem;
-				/* keep the border/padding intact when it wraps on narrow screens */
-				-webkit-box-decoration-break: clone;
-				box-decoration-break: clone;
-			}
-
-			.mobile-break {
-				display: none;
-			}
-
-			@media (max-width: 640px) {
-				li {
-					font-size: 1rem;
-				}
-				.mobile-break {
-					display: inline;
-				}
-			}
-		</style>
-	</head>
-	<body class="min-h-screen flex items-start justify-center">
-		<button
-			id="theme-toggle"
-			class="fixed top-4 right-4 p-2 rounded-lg theme-bg transition-colors duration-200"
-		>
-			<svg
-				id="sun-icon"
-				class="w-5 h-5"
-				fill="currentColor"
-				viewBox="0 0 20 20"
+<Page title="yo, i'm warren" description="i'm a wildcard">
+	<a class="to-blog" href="/blog/" slot="after">blog</a>
+	<section>
+		<div class="socials">
+			<a
+				href="https://github.com/warrenyun"
+				target="_blank"
+				rel="noopener noreferrer"
 			>
-				<path
-					d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-				></path>
-			</svg>
-			<svg
-				id="moon-icon"
-				class="w-5 h-5 hidden"
-				fill="currentColor"
-				viewBox="0 0 20 20"
+				<svg
+					fill="currentColor"
+					viewBox="0 0 24 24"
+					aria-hidden="true"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+						clip-rule="evenodd"></path>
+				</svg>
+			</a>
+			<a
+				href="https://x.com/warrenyun_"
+				target="_blank"
+				rel="noopener noreferrer"
 			>
-				<path
-					d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-				></path>
-			</svg>
-		</button>
-		<main class="w-full max-w-2xl text-lg leading-relaxed">
-			<section>
-				<h1 class="theme-text-primary">warren yun</h1>
-				<p>
-					Hi. I like to make things and solve cool problems!
-				</p>
-				<p>
-					Right now, I am working on self-driving cars at <a
-							href="https://comma.ai/"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="underline gruvbox-green">comma.ai</a>. I am also the software lead for <a
-							href="https://hytechracing.gatech.edu/"
-							class="underline gruvbox-yellow"
-							target="_blank"
-							rel="noopener noreferrer">Georgia Tech's Formula SAE Electric team</a>, building our first driverless racecar.
-				</p>
-				<p>
+				<svg
+					fill="currentColor"
+					viewBox="0 0 24 24"
+					aria-hidden="true"
+				>
+					<path
+						d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+					></path>
+				</svg>
+			</a>
+			<a
+				href="https://www.linkedin.com/in/warren-yun/"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<svg
+					fill="currentColor"
+					viewBox="0 0 24 24"
+					aria-hidden="true"
+				>
+					<path
+						d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+					></path>
+				</svg>
+			</a>
+		</div>
+		<h1>warren yun</h1>
+		<p>
+			Hi. I like to make things and solve cool problems!
+		</p>
+		<p>
+				  Right now, I'm leading software for <a
+					href="https://hytechracing.gatech.edu/"
+					class="link yellow"
+					target="_blank"
+					rel="noopener noreferrer">Georgia Tech's Formula SAE Electric team</a>. We're building our first driverless racecar for the 2027 FSAE autonomous cup!
 
-				I tend to hop from one interest to another (<span class="gruvbox-blue">web development</span>, <span class="gruvbox-blue">embedded security</span>, <span class="gruvbox-blue">mobile networking</span>.. blah blah), but I'm pretty in love with autonomous robots and cars right now. If you are doing something cool in this field, please reach out!
-				</p>
-			</section>
+		I tend to hop from one interest to another (<span class="blue">web development</span>, <span class="blue">embedded security</span>, <span class="blue">mobile networking</span>.. blah blah), but I've always loved <span class="green">autonomous robots</span>, and more recently, <span class="green">machine learning</span>!
+		</p>
+		<p>
+			I love meeting people doing cool things! If this is you, please reach out at 
+			<code class="email">wyun2006 [at] gmail [dot] com</code>!
+		</p>
+	</section>
+	<section>
+		<h2>previously i...</h2>
+		<ul>
+			<li>
+				trained end-to-end driving models at
+				 <a
+					href="https://comma.ai/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link green">comma.ai</a>
+			</li>
+			<li>
+				worked on flight reliability software for <a
+					href="https://www.spacex.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link green">SpaceX</a>
+			</li>
+			<li>
+				expanded coverage for millions of
+				 <a
+					href="https://starlink.com/business/mobile"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link green">Starlink Mobile</a>
+					users
+			</li>
+			<li>
+				spent a year flying around the country to "win" <a
+					href="https://devpost.com/software/talktuahbank"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link green">hackathons</a
+				>
+			</li>
+
+
+		</ul>
+		<Reel />
+	</section>
+	<section>
+		<h2>some assorted favorites</h2>
+		<Favorites />
+	</section>
+	{
+		friends.length > 0 && (
 			<section>
-				<h2>previously i...</h2>
-				<ul class="list-disc">
-					<li>
-						led a <a
-							href="https://www.youtube.com/watch?v=Q2C3_wkqsVw"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="underline gruvbox-green"
-							>competitive robotics team</a
-						> in high school
-					</li>
-					<li>
-						spent a year flying around the country to win <a
-							href="https://devpost.com/software/talktuahbank"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="underline gruvbox-green">hackathons</a
-						>
-					</li>
-					<li>
-						worked on flight reliability software for <a
-							href="https://www.spacex.com/"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="underline gruvbox-green">SpaceX</a>
-					</li>
-					<li>
-						expanded coverage for millions of
-						 <a
-							href="https://starlink.com/business/mobile"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="underline gruvbox-green">Starlink Mobile</a>
-							users
-					</li>
+				<h2>lovely people i've worked with</h2>
+				<ul>
+					{friends.map(([name, href]) => (
+						<li>
+							<a class="link green" href={href} target="_blank" rel="noopener noreferrer">{name}</a>
+						</li>
+					))}
 				</ul>
 			</section>
-			<section>
-				<h2>some assorted favorites</h2>
-				<Favorites />
-			</section>
-			<div class="flex gap-4">
-				<a
-					href="https://github.com/warrenyun"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="theme-text-muted transition-colors duration-200"
-				>
-					<svg
-						class="w-6 h-6"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-						aria-hidden="true"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-							clip-rule="evenodd"></path>
-					</svg>
-				</a>
-				<a
-					href="https://x.com/warrenyun_"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="theme-text-muted transition-colors duration-200"
-				>
-					<svg
-						class="w-6 h-6"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-						aria-hidden="true"
-					>
-						<path
-							d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-						></path>
-					</svg>
-				</a>
-				<a
-					href="https://therefore.sh/"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="theme-text-muted transition-colors duration-200"
-				>
-					<svg
-						class="w-6 h-6"
-						fill="currentColor"
-						viewBox="0 0 24 24"
-						aria-hidden="true"
-					>
-						<circle cx="12" cy="7" r="2.2"></circle>
-						<circle cx="5.1" cy="19" r="2.2"></circle>
-						<circle cx="18.9" cy="19" r="2.2"></circle>
-					</svg>
-				</a>
-			</div>
-			<p class="text-base theme-contact-text" id="contact-text">
-				want to work with me? contact me at <br class="mobile-break" /><code
-					class="theme-code-bg rounded border text-base"
-					>wyun [at] gatech [dot] edu</code
-				>
-			</p>
+		)
+	}
+	<GpgKey />
+	<NowPlaying slot="after" />
+</Page>
 
-			<GpgKey />
-		</main>
-		<NowPlaying />
-	</body>
-</html>
+<style>
+	h1 {
+		font-size: 1.875rem;
+		color: var(--fg1);
+	}
+	h2 {
+		font-size: 1.125rem;
+	}
+	ul {
+		padding-left: 1.15rem;
+		list-style-type: disc;
+	}
 
-<script>
-	const html = document.documentElement;
-	const themeToggle = document.getElementById("theme-toggle");
-	const sunIcon = document.getElementById("sun-icon");
-	const moonIcon = document.getElementById("moon-icon");
-	// dark is the default for everyone; only an explicit toggle changes it
-	const getPreferredTheme = () => localStorage.getItem("theme") || "dark";
+	/* main (from the Page layout) and the previous sibling (maybe a component) are global here */
+	:global(main) > :global(*) + * {
+		margin-top: 2.5rem;
+	}
+	section > * + * {
+		margin-top: 0.85rem;
+	}
+	h1 + p {
+		margin-top: 1.25rem;
+	}
+	li + li {
+		margin-top: 0.35rem;
+	}
 
-	const setTheme = (theme: string) => {
-		if (theme === "light") {
-			html.classList.remove("dark");
-			html.classList.add("light");
-			sunIcon?.classList.add("hidden");
-			moonIcon?.classList.remove("hidden");
-		} else {
-			html.classList.remove("light");
-			html.classList.add("dark");
-			sunIcon?.classList.remove("hidden");
-			moonIcon?.classList.add("hidden");
+	/* sits where the theme toggle used to */
+	.to-blog {
+		position: fixed;
+		top: 1.25rem;
+		right: 1.5rem;
+		font-size: 1rem;
+		color: var(--fg4);
+		transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	.to-blog:hover {
+		color: var(--fg2);
+	}
+
+	.link {
+		text-decoration-line: underline;
+	}
+	.yellow {
+		color: var(--yellow);
+	}
+	.green {
+		color: var(--green);
+	}
+	.blue {
+		color: var(--blue);
+	}
+
+	.socials {
+		display: flex;
+		gap: 0.75rem;
+	}
+	.socials + h1 {
+		margin-top: 0.75rem;
+	}
+	.socials a {
+		color: var(--fg4);
+		transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	.socials a:hover {
+		color: var(--fg2);
+	}
+	.socials svg {
+		width: 1.1rem;
+		height: 1.1rem;
+	}
+
+	.email {
+		padding: 0.05rem 0.4rem;
+		border: 1px solid var(--bg2);
+		border-radius: 0.25rem;
+		background-color: var(--bg1);
+		color: var(--fg2);
+		font-size: 0.9em;
+		/* wrap to the next line as one piece rather than mid-address */
+		white-space: nowrap;
+	}
+
+	@media (max-width: 640px) {
+		li {
+			font-size: 1rem;
 		}
-		localStorage.setItem("theme", theme);
-	};
-
-	setTheme(getPreferredTheme());
-
-	themeToggle?.addEventListener("click", () => {
-		const currentTheme =
-			localStorage.getItem("theme") || getPreferredTheme();
-		setTheme(currentTheme === "dark" ? "light" : "dark");
-	});
-
-</script>
+	}
+</style>

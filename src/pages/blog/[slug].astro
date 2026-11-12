@@ -1,0 +1,129 @@
+---
+import { getCollection, render } from "astro:content";
+import Page from "../../layouts/Page.astro";
+
+export async function getStaticPaths() {
+	const posts = await getCollection("blog", ({ data }) => !data.url && (import.meta.env.DEV || !data.draft));
+	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, date, description } = post.data;
+---
+
+<Page title={`${title} · warren yun`} description={description ?? title}>
+	<a class="back" href="/blog/">← blog</a>
+	<h1>{title}</h1>
+	{description && <p class="desc">{description}</p>}
+	<time datetime={date.toISOString()}>{date.toISOString().slice(0, 10)}</time>
+	<article class="prose">
+		<Content />
+	</article>
+</Page>
+
+<style>
+	.back,
+	time {
+		font-size: 1rem;
+		color: var(--fg4);
+	}
+	.back:hover {
+		color: var(--fg2);
+	}
+	h1 {
+		margin-top: 0.5rem;
+		font-size: 1.875rem;
+		color: var(--fg1);
+	}
+	.desc {
+		margin-top: 0.5rem;
+		color: var(--fg3);
+	}
+	time {
+		display: block;
+		margin-top: 0.35rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* the markdown renders without scoping attributes, hence :global for everything inside */
+	.prose {
+		margin-top: 2.5rem;
+	}
+	.prose > :global(* + *) {
+		margin-top: 1.1em;
+	}
+	.prose :global(h2),
+	.prose :global(h3) {
+		margin-top: 2em;
+		color: var(--fg1);
+		font-weight: inherit;
+	}
+	.prose :global(h2) {
+		font-size: 1.375rem;
+	}
+	.prose :global(h3) {
+		font-size: 1.15rem;
+	}
+	.prose :global(a) {
+		color: var(--green);
+		text-decoration-line: underline;
+	}
+	.prose :global(ul),
+	.prose :global(ol) {
+		padding-left: 1.25rem;
+	}
+	.prose :global(ul) {
+		list-style-type: disc;
+	}
+	.prose :global(li + li) {
+		margin-top: 0.35rem;
+	}
+	.prose :global(blockquote) {
+		padding-left: 1rem;
+		border-left: 2px solid var(--bg2);
+		color: var(--fg4);
+	}
+	.prose :global(hr) {
+		margin: 2.5rem 0;
+		border-top: 1px solid var(--bg2);
+	}
+	.prose :global(img),
+	.prose :global(video) {
+		border-radius: 6px;
+	}
+	.prose :global(:not(pre) > code) {
+		padding: 0.05rem 0.35rem;
+		border: 1px solid var(--bg2);
+		border-radius: 0.25rem;
+		background-color: var(--bg1);
+		font-size: 0.875em;
+		-webkit-box-decoration-break: clone;
+		box-decoration-break: clone;
+	}
+	.prose :global(table) {
+		border-collapse: collapse;
+		font-size: 0.95rem;
+	}
+	.prose :global(th),
+	.prose :global(td) {
+		padding: 0.3rem 0.75rem 0.3rem 0;
+		border-bottom: 1px solid var(--bg2);
+		text-align: left;
+	}
+	.prose :global(th) {
+		font-weight: inherit;
+		color: var(--fg4);
+	}
+
+	/* code blocks: shiki inlines its own background, hence the !important */
+	.prose :global(pre) {
+		padding: 0.9rem 1rem;
+		border: 1px solid var(--bg2);
+		border-radius: 0.4rem;
+		background-color: var(--bg1) !important;
+		font-size: 0.85rem;
+		line-height: 1.6;
+		overflow-x: auto;
+	}
+</style>

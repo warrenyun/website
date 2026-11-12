@@ -1,0 +1,40 @@
+---
+// the shell every page shares: head and the centered reading column.
+import BaseHead from "../components/BaseHead.astro";
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<main>
+			<slot />
+		</main>
+		<slot name="after" />
+	</body>
+</html>
+
+<style>
+	body {
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		min-height: 100vh;
+		padding: 6rem 1.5rem 4rem;
+	}
+	main {
+		width: 100%;
+		max-width: 42rem;
+		font-size: 1.125rem;
+		line-height: 1.625;
+	}
+</style>

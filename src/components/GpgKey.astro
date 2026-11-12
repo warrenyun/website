@@ -35,23 +35,9 @@ YDSLcJzHAP0bvp96+xsvsr24JSjespW3tyAI5wrozckj350WLEOBAQ==
 
 <style>
 	.gpg {
-		--gpg-muted: #a89984;
-		--gpg-text: #d5c4a1;
-		--gpg-bg: #3c3836;
-		--gpg-border: #504945;
-		--gpg-accent: #8ec07c;
-
 		display: block;
 		margin-top: 1rem;
 		font-size: 0.95rem;
-	}
-
-	html.light .gpg {
-		--gpg-muted: #7c6f64;
-		--gpg-text: #504945;
-		--gpg-bg: #ebdbb2;
-		--gpg-border: #d5c4a1;
-		--gpg-accent: #427b58;
 	}
 
 	.gpg summary {
@@ -60,7 +46,7 @@ YDSLcJzHAP0bvp96+xsvsr24JSjespW3tyAI5wrozckj350WLEOBAQ==
 		gap: 0.45rem;
 		width: fit-content;
 		padding: 0.15rem 0;
-		color: var(--gpg-muted);
+		color: var(--fg4);
 		cursor: pointer;
 		list-style: none;
 	}
@@ -91,15 +77,15 @@ YDSLcJzHAP0bvp96+xsvsr24JSjespW3tyAI5wrozckj350WLEOBAQ==
 		margin: 0;
 		padding: 0.7rem 2.4rem 0.7rem 0.8rem;
 		overflow: auto;
-		border: 1px solid var(--gpg-border);
+		border: 1px solid var(--bg2);
 		border-radius: 0.4rem;
-		background-color: var(--gpg-bg);
+		background-color: var(--bg1);
 	}
 	.gpg code {
 		padding: 0;
 		border: 0;
 		background: none;
-		color: var(--gpg-text);
+		color: var(--fg2);
 		font-size: 0.82rem;
 		line-height: 1.5;
 		white-space: pre;
@@ -113,12 +99,12 @@ YDSLcJzHAP0bvp96+xsvsr24JSjespW3tyAI5wrozckj350WLEOBAQ==
 		padding: 0.35rem;
 		border: 0;
 		border-radius: 0.3rem;
-		background-color: var(--gpg-bg);
-		color: var(--gpg-muted);
+		background-color: var(--bg1);
+		color: var(--fg4);
 		cursor: pointer;
 	}
 	.gpg-copy:hover {
-		color: var(--gpg-text);
+		color: var(--fg2);
 	}
 	.gpg-icon {
 		width: 1rem;
@@ -130,7 +116,7 @@ YDSLcJzHAP0bvp96+xsvsr24JSjespW3tyAI5wrozckj350WLEOBAQ==
 	}
 	.gpg-copy[data-copied] .gpg-icon-done {
 		display: block;
-		color: var(--gpg-accent);
+		color: var(--green);
 	}
 
 	@media (max-width: 640px) {
