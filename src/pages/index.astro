@@ -69,23 +69,36 @@ const friends: [string, string][] = [
 		<p>
 			Hi. I like to make things and solve cool problems!
 		</p>
-		<p>
-				  Right now, I'm leading software for <a
-					href="https://hytechracing.gatech.edu/"
-					class="link yellow"
-					target="_blank"
-					rel="noopener noreferrer">Georgia Tech's Formula SAE Electric team</a>. We're building our first driverless racecar for the 2027 FSAE autonomous cup!
-
-		I tend to hop from one interest to another (<span class="blue">web development</span>, <span class="blue">embedded security</span>, <span class="blue">mobile networking</span>.. blah blah), but I've always loved <span class="green">autonomous robots</span>, and more recently, <span class="green">machine learning</span>!
+		<p>For the past <span id="since">6 years</span>, I've found joy in writing software that other people use and benefit from. I've always found myself hopping from one interest to another (<span class="blue">web/app development</span>, <span class="blue">systems programming</span>, <span class="blue">mobile networking</span>.. blah blah), but my heart has always lived in <span class="green">autonomous robotics</span>, and more recently, <span class="green">machine learning</span>!
 		</p>
 		<p>
-			I love meeting people doing cool things! If this is you, please reach out at 
-			<code class="email">wyun2006 [at] gmail [dot] com</code>!
+			I love meeting interesting people doing cool things! If you want to chat, please reach out at 
+			<code class="email">wyun2006 [at] gmail [dot] com</code> ! Alternatively, you can probably find me somewhere in the paddocks of
+			<span class="place">
+				<a
+					class="address"
+					href="https://maps.google.com/?q=Georgia+Tech+Student+Competition+Center,+575+14th+St+NW,+Atlanta,+GA+30318"
+					target="_blank"
+					rel="noopener noreferrer">575 14th St NW, Atlanta, GA 30318</a
+				><span class="map-card" aria-hidden="true">
+					<span class="map-frame"></span>
+					<span class="map-label">Georgia Tech Student Competition Center</span>
+				</span></span
+			>.
 		</p>
 	</section>
 	<section>
 		<h2>previously i...</h2>
 		<ul>
+			<li>
+			  led software development for
+					<a
+					href="https://hytechracing.gatech.edu/"
+					class="link yellow"
+					target="_blank"
+					rel="noopener noreferrer">HyTech's</a>
+				  first driverless racecar
+			</li>
 			<li>
 				trained end-to-end driving models at
 				 <a
@@ -95,7 +108,7 @@ const friends: [string, string][] = [
 					class="link green">comma.ai</a>
 			</li>
 			<li>
-				worked on flight reliability software for <a
+				developed flight reliability software for <a
 					href="https://www.spacex.com/"
 					target="_blank"
 					rel="noopener noreferrer"
@@ -109,6 +122,16 @@ const friends: [string, string][] = [
 					rel="noopener noreferrer"
 					class="link green">Starlink Mobile</a>
 					users
+			</li>
+			<li>
+				was the captain of a 
+				<a
+					href="https://www.youtube.com/watch?v=Q2C3_wkqsVw"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link green">competitive robotics team</a
+				>
+				in high school
 			</li>
 			<li>
 				spent a year flying around the country to "win" <a
@@ -198,6 +221,72 @@ const friends: [string, string][] = [
 		color: var(--blue);
 	}
 
+	/* the live counter: the email chip's box, in yellow, in the body font */
+	#since {
+		padding: 0.05rem 0.4rem;
+		border: 1px solid var(--bg2);
+		border-radius: 0.25rem;
+		background-color: var(--bg1);
+		color: var(--yellow);
+		/* fixed-width digits so the line doesn't shift every second */
+		font-variant-numeric: tabular-nums;
+		text-decoration-line: underline;
+		text-decoration-style: dotted;
+		text-underline-offset: 0.2em;
+		/* it's long, so let it wrap on phones but keep each line's border and padding */
+		-webkit-box-decoration-break: clone;
+		box-decoration-break: clone;
+	}
+
+	.address {
+		text-decoration-line: underline;
+		text-decoration-style: dotted;
+		text-underline-offset: 0.2em;
+	}
+	/* fixed so it can't be clipped; the script places it under the address */
+	.map-card {
+		position: fixed;
+		z-index: 30;
+		display: block;
+		width: 300px;
+		padding: 0.4rem;
+		border: 1px solid var(--bg2);
+		border-radius: 0.6rem;
+		background: var(--bg1);
+		box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(4px);
+		transition:
+			opacity 150ms ease,
+			transform 150ms ease,
+			visibility 150ms;
+	}
+	.place.open .map-card {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+	.map-frame {
+		display: block;
+		height: 190px;
+		overflow: hidden;
+		border-radius: 0.4rem;
+		background: var(--bg2);
+	}
+	.map-frame :global(iframe) {
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+	.map-label {
+		display: block;
+		padding: 0.35rem 0.2rem 0.1rem;
+		font-size: 0.8rem;
+		line-height: 1.3;
+		color: var(--fg4);
+	}
+
 	.socials {
 		display: flex;
 		gap: 0.75rem;
@@ -234,3 +323,59 @@ const friends: [string, string][] = [
 		}
 	}
 </style>
+
+<script>
+	// a) live "for the past ..." counter
+	const START = Date.UTC(2020, 3, 13, 22, 32); // 6:32pm eastern (edt) on april 13, 2020
+	const since = document.getElementById("since");
+	const plural = (n: number, unit: string) => `${n} ${unit}${n === 1 ? "" : "s"}`;
+	const tick = () => {
+		const now = new Date();
+		// whole years by calendar anniversary, the rest broken down from there
+		let years = now.getUTCFullYear() - 2020;
+		const anniversary = new Date(START);
+		anniversary.setUTCFullYear(2020 + years);
+		if (anniversary > now) anniversary.setUTCFullYear(2020 + --years);
+		let s = Math.floor((now.getTime() - anniversary.getTime()) / 1000);
+		const days = Math.floor(s / 86400);
+		const hours = Math.floor((s %= 86400) / 3600);
+		const minutes = Math.floor((s %= 3600) / 60);
+		const seconds = s % 60;
+		since!.textContent = [
+			plural(years, "year"),
+			plural(days, "day"),
+			plural(hours, "hour"),
+			plural(minutes, "minute"),
+			plural(seconds, "second"),
+		].join(", ");
+	};
+	tick();
+	setInterval(tick, 1000);
+
+	// b) hovering the address shows a little map; it only loads the first time
+	const place = document.querySelector<HTMLElement>(".place")!;
+	const card = place.querySelector<HTMLElement>(".map-card")!;
+	let hideTimer = 0;
+	const open = () => {
+		clearTimeout(hideTimer);
+		const frame = card.querySelector(".map-frame")!;
+		if (!frame.firstChild) {
+			const map = document.createElement("iframe");
+			map.src = "https://maps.google.com/maps?q=Georgia+Tech+Student+Competition+Center,+575+14th+St+NW,+Atlanta,+GA+30318&z=16&output=embed";
+			map.title = "Georgia Tech Student Competition Center on Google Maps";
+			map.loading = "lazy";
+			frame.append(map);
+		}
+		// under the address (above it if there's no room), kept on screen
+		const r = place.querySelector(".address")!.getBoundingClientRect();
+		const w = card.offsetWidth, h = card.offsetHeight;
+		card.style.left = `${Math.max(12, Math.min(r.left, innerWidth - w - 12))}px`;
+		card.style.top = `${r.bottom + 8 + h > innerHeight ? r.top - h - 8 : r.bottom + 8}px`;
+		place.classList.add("open");
+	};
+	// a short delay lets the cursor cross the gap into the card
+	const close = () => (hideTimer = window.setTimeout(() => place.classList.remove("open"), 150));
+	place.addEventListener("pointerenter", (e) => e.pointerType === "mouse" && open());
+	place.addEventListener("pointerleave", (e) => e.pointerType === "mouse" && close());
+	addEventListener("scroll", () => place.classList.remove("open"), { passive: true });
+</script>
