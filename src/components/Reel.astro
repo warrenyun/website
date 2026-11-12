@@ -174,14 +174,32 @@ const reel: { name: string; label: string; area: string }[] = [
 	const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 	// everything on screen plays, everything off screen pauses
+	const visible = new Set<HTMLVideoElement>();
+	let refused = false;
+	const start = (vid: HTMLVideoElement) => vid.play().catch(() => (refused = true));
 	const io = new IntersectionObserver((entries) =>
 		entries.forEach(({ target, isIntersecting }) => {
 			const vid = target as HTMLVideoElement;
-			if (isIntersecting && !calm) vid.play().catch(() => {});
-			else vid.pause();
+			if (isIntersecting) {
+				visible.add(vid);
+				if (!calm) start(vid);
+			} else {
+				visible.delete(vid);
+				vid.pause();
+			}
 		}),
 	);
-	document.querySelectorAll(".reel video").forEach((vid) => io.observe(vid));
+	document.querySelectorAll<HTMLVideoElement>(".reel video").forEach((vid) => io.observe(vid));
+
+	// ios low power mode (and "auto-play video previews" off) refuses to start video
+	// until the visitor touches the page, so try again on the next tap
+	const retry = () => {
+		if (!refused || calm) return;
+		refused = false;
+		visible.forEach(start);
+	};
+	addEventListener("touchend", retry, { passive: true });
+	addEventListener("click", retry);
 
 	// click a tile to see it big, picking up from the frame it was on
 	const big = document.querySelector<HTMLDialogElement>(".reel-big")!;
@@ -194,7 +212,8 @@ const reel: { name: string; label: string; area: string }[] = [
 			big.querySelector(".cap")!.textContent = tile.dataset.label ?? "";
 			big.showModal();
 			copy.currentTime = src.currentTime;
-			if (!calm) copy.play().catch(() => {});
+			// opening a clip is an explicit choice, so it plays even with reduced motion on
+			copy.play().catch(() => {});
 		}),
 	);
 	// clicks on the dimmed backdrop land on the dialog itself
